@@ -21,7 +21,7 @@ namespace DockerNetCore.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(_bookService.Get());
+            return View(await _bookService.GetAsync());
         }
 
         public IActionResult Create()
@@ -35,7 +35,7 @@ namespace DockerNetCore.Controllers
         {
             if (ModelState.IsValid)
             {
-                _bookService.Create(book);
+                await _bookService.CreateAsync(book);
                 return RedirectToAction(nameof(Index));
             }
             return View(book);
@@ -47,7 +47,7 @@ namespace DockerNetCore.Controllers
             {
                 return NotFound();
             }
-            var book = _bookService.Get(id);
+            var book = await _bookService.GetAsync(id);
             if (book == null)
             {
                 return NotFound();
@@ -60,7 +60,7 @@ namespace DockerNetCore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            _bookService.Remove(id);
+            await _bookService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -18,15 +18,15 @@ namespace DockerNetCore.Services
             _books = database.GetCollection<Book>(settings.BooksCollectionName);
         }
 
-        public List<Book> Get() =>
-            _books.Find(book => true).ToList();
+        public async Task<List<Book>> GetAsync() =>
+            await _books.Find(book => true).ToListAsync();
 
-        public Book Get(string id) =>
-            _books.Find<Book>(book => book.Id == id).FirstOrDefault();
+        public async Task<Book> GetAsync(string id) =>
+            await _books.Find<Book>(book => book.Id == id).FirstOrDefaultAsync();
 
-        public Book Create(Book book)
+        public async Task<Book> CreateAsync(Book book)
         {
-            _books.InsertOne(book);
+            await _books.InsertOneAsync(book);
             return book;
         }
 
@@ -36,7 +36,7 @@ namespace DockerNetCore.Services
         public void Remove(Book bookIn) =>
             _books.DeleteOne(book => book.Id == bookIn.Id);
 
-        public void Remove(string id) => 
-            _books.DeleteOne(book => book.Id == id);
+        public async Task RemoveAsync(string id) => 
+            await _books.DeleteOneAsync(book => book.Id == id);
     }
 }
